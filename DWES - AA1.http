@@ -1,6 +1,0 @@
-@DWES___AA1_HostAddress = http://localhost:5047
-
-GET {{DWES___AA1_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

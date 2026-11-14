@@ -110,24 +110,50 @@ Para garantizar la seguridad de la API y no exponer directamente las entidades d
 
 ## 6. Instrucciones de Ejecución
 
-### Opción A: Ejecución completa con Docker Compose
-1. Clonar el repositorio y situarse en la raíz del proyecto.
-2. Levantar la base de datos y la API en segundo plano:
+### Opción A: Ejecución completa con Docker Compose (Recomendada)
+1. **Clonar el repositorio y situarse en la raíz del proyecto:**
+   ```bash
+   git clone https://github.com/Lorenzoo195/DWES_AA1.git
+   cd DWES_AA1
+   ```
+
+2. **Levantar los contenedores (Base de datos y API):**
    ```bash
    docker compose up -d
    ```
-3. Acceder al explorador y probar los endpoints en Swagger:
+
+3. **Inicializar la Base de Datos (Solo la primera vez):**
+   Para crear la base de datos `TiendaRopaDb`, las tablas y los datos de prueba:
+   Abrir el archivo `DB/createDB.sql` en Visual Studio Code, conectar con la extensión *SQL Server (mssql)* a `localhost` en el puerto `4991` (Usuario: `sa`, Contraseña: `YourPassword123!`) y ejecutar el script (**Execute Query**).
+
+4. **Acceder a la Documentación Interactiva (Swagger UI):**
+   Abrir en el navegador:
    ```
    http://localhost:1994/swagger
    ```
 
+5. **Recompilar tras realizar cambios en el código:**
+   Si se añaden o modifican controladores, modelos o repositorios, para volver a compilar la imagen y actualizar el contenedor:
+   ```bash
+   docker compose up -d --build
+   ```
+
+---
+
 ### Opción B: Ejecución de la API en local contra SQL Server en Docker
-1. Iniciar únicamente el contenedor de base de datos:
+1. **Iniciar únicamente el contenedor de base de datos:**
    ```bash
    docker compose up -d sqlserver
    ```
-2. Ejecutar el script `DB/createDB.sql` conectándose a `localhost,4991`.
-3. Iniciar la API con el CLI de .NET:
+2. **Ejecutar el script `DB/createDB.sql`** conectándose a `localhost,4991`.
+3. **Iniciar la API localmente:**
    ```bash
    dotnet run
    ```
+
+4. **Acceder a la Documentación Interactiva (Swagger UI en local):**
+   Abrir en el navegador:
+   ```
+   http://localhost:5047/swagger
+   ```
+
