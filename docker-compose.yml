@@ -1,0 +1,26 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_tienda
+    ports:
+      - "4991:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourPassword123!
+      - MSSQL_PID=Express
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  api:
+    build: .
+    container_name: api_tienda
+    ports:
+      - "1994:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__TiendaRopaDb=Server=sqlserver,1433;Database=TiendaRopaDb;User Id=sa;Password=YourPassword123!;TrustServerCertificate=True;
+
+volumes:
+  sqlserver_data:
