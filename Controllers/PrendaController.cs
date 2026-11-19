@@ -16,25 +16,20 @@ public class PrendaController : ControllerBase
     }
     [HttpGet]
     public async Task<ActionResult<List<Prenda>>> GetAll(
-        [FromQuery] string? categoria, 
-        [FromQuery] bool? esImpermeable, 
-        [FromQuery] bool? precioAscendente)
+        [FromQuery] PrendaFilters filter)
     {
         var prendas = await _repository.GetAllAsync();
-
-        if (!string.IsNullOrWhiteSpace(categoria))
+        if (!string.IsNullOrWhiteSpace(filter.Categoria))
         {
-            prendas = prendas.Where(p => p.Categoria.Equals(categoria, StringComparison.OrdinalIgnoreCase)).ToList();
+            prendas = prendas.Where(p => p.Categoria.Equals(filter.Categoria, StringComparison.OrdinalIgnoreCase)).ToList();
         }
-
-        if (esImpermeable.HasValue)
+        if (filter.EsImpermeable.HasValue)
         {
-            prendas = prendas.Where(p => p.EsImpermeable == esImpermeable.Value).ToList();
+            prendas = prendas.Where(p => p.EsImpermeable == filter.EsImpermeable.Value).ToList();
         }
-
-        if (precioAscendente.HasValue)
+        if (filter.PrecioAscendente.HasValue)
         {
-            if (precioAscendente.Value)
+            if (filter.PrecioAscendente.Value)
             {
                 prendas = prendas.OrderBy(p => p.Precio).ToList();
             }
@@ -43,7 +38,6 @@ public class PrendaController : ControllerBase
                 prendas = prendas.OrderByDescending(p => p.Precio).ToList();
             }
         }
-
         return Ok(prendas);
     }
     [HttpGet("{id}")]
