@@ -3,7 +3,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: db_tienda
     env_file:
-      - .env
+      - ${ENV_FILE:-.env}
     ports:
       - "${DB_PORT}:1433"
     volumes:
@@ -15,7 +15,7 @@ services:
     build: .
     container_name: api_tienda
     env_file:
-      - .env
+      - ${ENV_FILE:-.env}
     ports:
       - "${API_PORT}:8080"
     depends_on:

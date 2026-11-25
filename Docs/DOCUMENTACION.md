@@ -26,13 +26,17 @@
 
 ---
 
-## 3. Configuración de Red y Puertos (Host / Anfitrión)
+## 3. Configuración de Entornos y Puertos (Twelve-Factor App)
 
-Cumpliendo con los criterios del trabajo basados en el identificador de alumno:
-- **Puerto de la API REST (Host):** `1994` (redireccionado al puerto interno `8080` de .NET).
-  - Acceso a documentación Swagger: `http://localhost:1994/swagger`
-- **Puerto de la Base de Datos (Host):** `4991` (puerto invertido, redireccionado al puerto interno `1433` de SQL Server).
-  - Conexión local / SSMS / Azure Data Studio: `localhost,4991`
+Siguiendo las buenas prácticas de la industria y la metodología **Twelve-Factor App** (Factores III, V y X: separación estricta de configuración y código, artefacto único inmutable y paridad entre entornos), la aplicación cuenta con **3 perfiles de ejecución** configurados mediante variables de entorno y archivos `.env`:
+
+| Entorno | Archivo de Configuración | Puerto API (Host) | Puerto BD (Host) | Entorno .NET | Acceso Swagger |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **DEV** (Desarrollo) | `dev.env` | `1993` | `3991` | `Development` | `http://localhost:1993/swagger` |
+| **PRE** (Preproducción - Activo/Oficial) | `pre.env` (o `.env`) | **`1994`** | **`4991`** | `Staging` | **`http://localhost:1994/swagger`** |
+| **PRO** (Producción) | `pro.env` | `1995` | `5991` | `Production` | `http://localhost:1995/swagger` |
+
+- **Identificador de alumno (`a19949`):** Asignado oficialmente al entorno activo **PRE** (`1994` API / `4991` BD).
 
 ---
 
@@ -110,27 +114,33 @@ Para garantizar la seguridad de la API y no exponer directamente las entidades d
 
 ## 6. Instrucciones de Ejecución
 
-### Opción A: Ejecución completa con Docker Compose (Recomendada)
+### Opción A: Ejecución con Docker Compose (Recomendada)
 1. **Clonar el repositorio y situarse en la raíz del proyecto:**
    ```bash
    git clone https://github.com/Lorenzoo195/DWES_AA1.git
    cd DWES_AA1
    ```
 
-2. **Levantar los contenedores (Base de datos y API):**
+2. **Levantar los contenedores:**
+   Por defecto, la aplicación arranca en el entorno **PRE (Preproducción)** usando el archivo `.env`:
    ```bash
    docker compose up -d
    ```
+   *(Si se desea arrancar un perfil específico, se utiliza el parámetro `--env-file`):*
+   - Para Desarrollo: `docker compose --env-file dev.env up -d`
+   - Para Preproducción: `docker compose --env-file pre.env up -d`
+   - Para Producción: `docker compose --env-file pro.env up -d`
 
 3. **Inicializar la Base de Datos (Solo la primera vez):**
    Para crear la base de datos `TiendaRopaDb`, las tablas y los datos de prueba:
-   Abrir el archivo `DB/createDB.sql` en Visual Studio Code, conectar con la extensión *SQL Server (mssql)* a `localhost` en el puerto `4991` (Usuario: `sa`, Contraseña: `YourPassword123!`) y ejecutar el script (**Execute Query**).
+   Abrir el archivo `DB/createDB.sql` en Visual Studio Code, conectar con la extensión *SQL Server (mssql)* a `localhost` en el puerto del entorno activo (para PRE: puerto oficial `4991`, Usuario: `sa`, Contraseña: `PrePassword123!`) y ejecutar el script (**Execute Query**).
 
 4. **Acceder a la Documentación Interactiva (Swagger UI):**
-   Abrir en el navegador:
+   Abrir en el navegador (para el entorno activo PRE):
    ```
    http://localhost:1994/swagger
    ```
+   *(En DEV se accede por `http://localhost:1993/swagger` y en PRO por `http://localhost:1995/swagger`)*.
 
 5. **Recompilar tras realizar cambios en el código:**
    Si se añaden o modifican controladores, modelos o repositorios, para volver a compilar la imagen y actualizar el contenedor:
