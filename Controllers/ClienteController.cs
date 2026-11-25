@@ -26,6 +26,31 @@ public class ClienteController : ControllerBase
         }
         return Ok(clientes);
     }
-
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Cliente>> GetById([FromRoute] int id)
+    {
+        var cliente = await _repository.GetByIdAsync(id);
+        if (cliente == null)
+        {
+            return NotFound();
+        }
+        return Ok(cliente);
+    }
+    [HttpPost]
+    public async Task<ActionResult<Cliente>> Create([FromBody] CreateClienteDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var nuevoCliente = new Cliente
+        {
+            Nombre = dto.Nombre,
+            Email = dto.Email,
+            EsSocioClub = dto.EsSocioClub
+        };
+        await _repository.AddAsync(nuevoCliente);
+        return CreatedAtAction(nameof(GetById), new { id = nuevoCliente.Id }, nuevoCliente);
+    }
     
 }

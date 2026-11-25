@@ -12,11 +12,12 @@
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Staging",
-                "ASPNETCORE_URLS": "http://localhost:1994"
+                "ASPNETCORE_URLS": "https://localhost:7994;http://localhost:1994"
             }
         },
         {
@@ -30,11 +31,12 @@
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:1993"
+                "ASPNETCORE_URLS": "https://localhost:7993;http://localhost:1993"
             }
         },
         {
@@ -48,11 +50,12 @@
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Production",
-                "ASPNETCORE_URLS": "http://localhost:1995"
+                "ASPNETCORE_URLS": "https://localhost:7995;http://localhost:1995"
             }
         },
         {
