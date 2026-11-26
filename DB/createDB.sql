@@ -7,11 +7,18 @@ GO
 USE TiendaRopaDb;
 GO
 
-IF OBJECT_ID('dbo.Envios', 'U') IS NOT NULL DROP TABLE dbo.Envios;
-IF OBJECT_ID('dbo.LineasPedido', 'U') IS NOT NULL DROP TABLE dbo.LineasPedido;
-IF OBJECT_ID('dbo.Pedidos', 'U') IS NOT NULL DROP TABLE dbo.Pedidos;
-IF OBJECT_ID('dbo.Prendas', 'U') IS NOT NULL DROP TABLE dbo.Prendas;
-IF OBJECT_ID('dbo.Clientes', 'U') IS NOT NULL DROP TABLE dbo.Clientes;
+DROP TABLE IF EXISTS Envios;
+DROP TABLE IF EXISTS LineasPedido;
+DROP TABLE IF EXISTS Pedidos;
+DROP TABLE IF EXISTS Prendas;
+DROP TABLE IF EXISTS Clientes;
+GO
+
+DROP TABLE IF EXISTS Envios;
+DROP TABLE IF EXISTS LineasPedido;
+DROP TABLE IF EXISTS Pedidos;
+DROP TABLE IF EXISTS Prendas;
+DROP TABLE IF EXISTS Clientes;
 GO
 
 CREATE TABLE Clientes (
