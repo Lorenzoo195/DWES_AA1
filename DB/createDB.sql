@@ -1,7 +1,17 @@
-CREATE DATABASE TiendaRopaDb;
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'TiendaRopaDb')
+BEGIN
+    CREATE DATABASE TiendaRopaDb;
+END
 GO
 
 USE TiendaRopaDb;
+GO
+
+IF OBJECT_ID('dbo.Envios', 'U') IS NOT NULL DROP TABLE dbo.Envios;
+IF OBJECT_ID('dbo.LineasPedido', 'U') IS NOT NULL DROP TABLE dbo.LineasPedido;
+IF OBJECT_ID('dbo.Pedidos', 'U') IS NOT NULL DROP TABLE dbo.Pedidos;
+IF OBJECT_ID('dbo.Prendas', 'U') IS NOT NULL DROP TABLE dbo.Prendas;
+IF OBJECT_ID('dbo.Clientes', 'U') IS NOT NULL DROP TABLE dbo.Clientes;
 GO
 
 CREATE TABLE Clientes (
@@ -49,14 +59,35 @@ CREATE TABLE Envios (
     PedidoId INT NOT NULL,
     FOREIGN KEY (PedidoId) REFERENCES Pedidos(Id)
 );
+GO
 
 INSERT INTO Clientes (Nombre, Email, EsSocioClub)
 VALUES 
 ('Carlos Montañero', 'carlos@email.com', 1),
-('Ana Escaladora', 'ana@email.com', 0);
+('Ana Escaladora', 'ana@email.com', 0),
+('David Alpinista', 'david@email.com', 1);
 
 INSERT INTO Prendas (Nombre, Categoria, Precio, Stock, EsImpermeable)
 VALUES 
 ('Chaqueta Gore-Tex Pro', 'Chaquetas', 299.99, 15, 1),
 ('Pantalón Trekking Dry', 'Pantalones', 89.50, 30, 0),
 ('Botas Alpinismo Extreme', 'Calzado', 220.00, 8, 1);
+
+INSERT INTO Pedidos (Codigo, Fecha, Total, Pagado, ClienteId)
+VALUES 
+('PED-2026-001', '2026-11-20 10:30:00', 299.99, 1, 1),
+('PED-2026-002', '2026-11-22 15:45:00', 89.50, 0, 2),
+('PED-2026-003', '2026-11-25 18:20:00', 220.00, 1, 3);
+
+INSERT INTO LineasPedido (Cantidad, PrecioUnitario, PedidoId, PrendaId)
+VALUES 
+(1, 299.99, 1, 1),
+(1, 89.50, 2, 2),
+(1, 220.00, 3, 3);
+
+INSERT INTO Envios (Empresa, FechaEnvio, Coste, Entregado, PedidoId)
+VALUES 
+('SEUR Express', '2026-11-21 09:00:00', 5.95, 1, 1),
+('Correos Express', '2026-11-23 11:15:00', 4.50, 0, 2),
+('DHL Freight', '2026-11-26 08:30:00', 6.50, 0, 3);
+GO

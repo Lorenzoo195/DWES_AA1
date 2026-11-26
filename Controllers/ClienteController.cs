@@ -52,5 +52,34 @@ public class ClienteController : ControllerBase
         await _repository.AddAsync(nuevoCliente);
         return CreatedAtAction(nameof(GetById), new { id = nuevoCliente.Id }, nuevoCliente);
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CreateClienteDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        var acliente = await _repository.GetByIdAsync(id);
+        if(acliente == null)
+        {
+            return NotFound();
+        }
+        acliente.Nombre = dto.Nombre;
+        acliente.Email = dto.Email;
+        acliente.EsSocioClub = dto.EsSocioClub;
+        await _repository.UpdateAsync(acliente);
+        return NoContent();
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var cliente = await _repository.GetByIdAsync(id);
+        if (cliente == null)
+        {
+            return NotFound();
+        }
+        await _repository.DeleteAsync(id);
+        return NoContent();
+    }
     
 }
